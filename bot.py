@@ -61,12 +61,12 @@ async def idle_checker(context: ContextTypes.DEFAULT_TYPE):
 
 def main():
     app = Application.builder().token(TELEGRAM_TOKEN).build()
-
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, chat))
     app.job_queue.run_repeating(idle_checker, interval=3600, first=10)
-
-    app.run_polling()
-
+    app.run_polling(
+        drop_pending_updates=True,      # clears the queue on startup
+        close_loop=False,               # cleaner shutdown on Railway
+    )
 if __name__ == "__main__":
     main()
