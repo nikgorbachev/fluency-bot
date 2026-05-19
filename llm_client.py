@@ -2,8 +2,8 @@ import httpx
 import os
 import time
 
-LLM_API_URL = "https://openrouter.ai/api/v1/chat/completions"
-MODEL = "openrouter/free"
+LLM_API_URL = "https://api.groq.com/openai/v1/chat/completions"
+MODEL = "llama-3.3-70b-versatile"
 
 SESSIONS = {}
 
