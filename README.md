@@ -25,7 +25,7 @@ It feels more like texting a friend than drilling flashcards.
 ### 1. Clone and install
  
 ```bash
-git clone https://github.com/your-username/language-penpal-bot
+git clone https://github.com/nikgorbachev/language-penpal-bot
 cd language-penpal-bot
 pip install -r requirements.txt
 ```
@@ -34,7 +34,7 @@ pip install -r requirements.txt
  
 ```bash
 TELEGRAM_BOT_TOKEN=your_telegram_bot_token
-OPENAI_API_KEY=your_openrouter_api_key   # OpenRouter uses this header name
+OPENAI_API_KEY=your_groq_api_key  # OpenRouter uses this header name
 ```
  
 ### 3. Run
@@ -48,7 +48,7 @@ python bot.py
 ## How to use it
  
 1. Open the bot on Telegram and send `/start`
-2. Type the language you want to practice (e.g. `French`, `Italian`, `Japanese`)
+2. Type the language you want to practice (e.g. `French`, `Italian`, `Spanish`)
 3. Your penpal introduces themselves — reply in the target language or English
 4. To end the session, say something like `bye`, `ciao`, or `see you`
 The bot also nudges you if you've gone quiet for a few hours, so it doesn't feel like a tool you opened and forgot.
@@ -58,7 +58,7 @@ The bot also nudges you if you've gone quiet for a few hours, so it doesn't feel
 ## Stack
  
 - **[python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot)** — async Telegram polling
-- **[OpenRouter](https://openrouter.ai)** (`openrouter/free`) — LLM routing, free tier
+- **[GroqCloud](https://console.groq.com/)** (`llama-3.3-70b-versatile`) — Ultra-low latency LPU inference with structured Markdown prompt boundaries
 - **[httpx](https://www.python-httpx.org/)** — async HTTP client
 - **Railway** — deployment
 ---
@@ -78,10 +78,10 @@ The bot also nudges you if you've gone quiet for a few hours, so it doesn't feel
 This is a proof of concept. A few things to keep in mind:
  
 - Sessions are **in-memory only** — restarting the bot clears all conversations
-- The free OpenRouter tier has rate limits and occasional model changes
+- Prompt optimization leverages Llama 3.3 70B's specific structured compliance rules
 - No persistent user profiles or progress tracking (yet)
 ---
  
 ## Why this exists
  
-Language tutors are expensive. Language apps feel like chores and are often very abstract. This is an experiment in a middle path: a low-commitment, low-cost conversation partner that adapts to you, and keeps the target cultural context
+Language tutors are expensive. Language apps feel like chores and are often very abstract. This is an experiment in a middle path: a low-commitment, low-cost conversation partner that adapts to you, and keeps the target cultural context.
