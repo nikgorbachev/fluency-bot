@@ -44,26 +44,27 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = await ask_llm(user_id, text, mode="interaction")
     await update.message.reply_text(msg)
 
-async def idle_checker(app: Application):
-    while True:
-        now = time.time()
-        for user_id, sess in list(SESSIONS.items()):
-            if now - sess["last_ts"] > 5 * 3600: 
-                sess["last_ts"] = now 
-                try:
-                    msg = await ask_llm(user_id, "It's been a while!", mode="interaction")
-                    await app.bot.send_message(user_id, msg)
-                except Exception as e:
-                    print("idle send error:", e)
-        await asyncio.sleep(300)  
+async def idle_checker(context: ContextTypes.DEFAULT_TYPE):
+    """
+    This function is run periodically by the Job Queue. 
+    No 'while True' loop needed anymore.
+    """
+    now = time.time()
+    for user_id, sess in list(SESSIONS.items()):
+        if now - sess["last_ts"] > 5 * 3600: 
+            sess["last_ts"] = now 
+            try:
+                msg = await ask_llm(user_id, "It's been a while!", mode="interaction")
+                await context.bot.send_message(chat_id=user_id, text=msg)
+            except Exception as e:
+                print("idle send error:", e)
 
 def main():
     app = Application.builder().token(TELEGRAM_TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, chat))
-
-    app.job_queue.run_repeating(lambda _: asyncio.create_task(idle_checker(app)), interval=3600, first=10)
+    app.job_queue.run_repeating(idle_checker, interval=3600, first=10)
 
     app.run_polling()
 
